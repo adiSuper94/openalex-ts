@@ -7,9 +7,9 @@ Deno.test("Get single work", async () => {
   assertEquals(work?.id, "https://openalex.org/W2741809807");
   const pubDate = work?.publicationDate;
   assertEquals(pubDate instanceof Date, true);
-  assertEquals(pubDate?.getFullYear(), 2018);
-  assertEquals(pubDate?.getMonth(), 1);
-  assertEquals(pubDate?.getDate(), 12);
+  assertEquals(pubDate?.getUTCFullYear(), 2018);
+  assertEquals(pubDate?.getUTCMonth(), 1);
+  assertEquals(pubDate?.getUTCDate(), 13);
 });
 
 Deno.test("Get single work, but exclude some fields", async () => {
@@ -19,9 +19,9 @@ Deno.test("Get single work, but exclude some fields", async () => {
   assertEquals(work?.id, "https://openalex.org/W2741809807");
   const pubDate = work?.publicationDate;
   assertEquals(pubDate instanceof Date, true);
-  assertEquals(pubDate?.getFullYear(), 2018);
-  assertEquals(pubDate?.getMonth(), 1);
-  assertEquals(pubDate?.getDate(), 12);
+  assertEquals(pubDate?.getUTCFullYear(), 2018);
+  assertEquals(pubDate?.getUTCMonth(), 1);
+  assertEquals(pubDate?.getUTCDate(), 13);
   assertEquals(work?.abztract, undefined);
   assertEquals(work?.primaryLocation, undefined);
   assertEquals(work?.openAccess, undefined);
