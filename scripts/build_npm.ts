@@ -15,20 +15,20 @@ await build({
   package: {
     name: name,
     version: version,
-    description: "NIH Reporter API client",
+    description: "OpenAlex API client",
     license: license,
-    keywords: ["nih", "nih-reporter", "api"],
+    keywords: ["openalex", "api"],
     repository: {
       "type": "git",
-      "url": "git+https://github.com/adiSuper94/nih-reporter.git",
+      "url": "git+https://github.com/adiSuper94/openalex-ts.git",
     },
     bugs: {
-      "url": "https://github.com/adiSuper94/nih-reporter/issues",
+      "url": "https://github.com/adiSuper94/openalex-ts/issues",
     },
-    homepage: "https://github.com/adiSuper94/nih-reporter#readme",
+    homepage: "https://github.com/adiSuper94/openalex-ts#readme",
     author: "Aditya Subramanian",
     dependencies: {
-      "@zod/mini": "^4.0.0-beta.20250424T163858",
+      "zod": "^4.0.5",
     },
   },
   postBuild() {

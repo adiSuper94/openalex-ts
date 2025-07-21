@@ -19,14 +19,17 @@ const DehydratedAuthorZchema = z.pipe(
   z.object({
     id: z.string(),
     display_name: z.string(),
-    orcid: z.optional(z.string()),
+    orcid: z.nullish(z.string()),
   }),
   z.transform((data) => {
-    return {
+    const author: DehydratedAuthor = {
       id: data.id,
       displayName: data.display_name,
-      orcid: data.orcid ?? undefined,
-    } as DehydratedAuthor;
+    };
+    if (data.orcid) {
+      author.orcid = data.orcid;
+    }
+    return author;
   }),
 );
 
