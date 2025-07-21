@@ -2,6 +2,7 @@ import * as z from "zod/mini";
 import { type DehydratedAuthor, DehydratedAuthorZchema } from "./author.ts";
 import { type DehydratedInstitution, DehydratedInstitutionZchema } from "./institution.ts";
 import { type DehydratedSource, DehydratedSourceZchema } from "./source.ts";
+import { Filter, FilterValue, Operator } from "../filter.ts";
 
 /**
  * Locations are meant to cover anywhere that a given work can be found.
@@ -412,7 +413,7 @@ export const WorkZchema = z.pipe(
   }),
 );
 
-export type ExcludeWorkField =
+type ExcludeWorkField =
   | "abstract_inverted_index"
   | "authorships"
   | "apc_list"
@@ -472,3 +473,133 @@ export function parseWork(data: unknown): [Work, undefined] | [undefined, Error]
     return [undefined, result.error];
   }
 }
+
+type WorkStringFilterAttributes =
+  | "authorships.affiliations.institution_ids"
+  | "authorships.author.id"
+  | "author.id"
+  | "authorships.author.orcid"
+  | "author.orcid"
+  | "authorships.countries"
+  | "authorships.institutions.country_code"
+  | "institutions.country_code"
+  | "authorships.institutions.id"
+  | "institutions.id"
+  | "authorships.institutions.lineage"
+  | "authorships.institutions.ror"
+  | "institutions.ror"
+  | "authorships.institutions.type"
+  | "apc_list.currency"
+  | "apc_list.provenance"
+  | "apc_paid.currency"
+  | "apc_paid.provenance"
+  | "best_oa_location.license"
+  | "best_oa_location.source.id"
+  | "best_oa_location.source.issn"
+  | "best_oa_location.source.type"
+  | "best_oa_location.source.host_organization"
+  | "best_oa_location.version"
+  | "biblio.issue"
+  | "biblio.last_page"
+  | "biblio.volume"
+  | "biblio.first_page"
+  | "concepts.id"
+  | "concept.id"
+  | "concepts.wikidata"
+  | "corresponding_author_ids"
+  | "corresponding_institution_ids"
+  | "doi"
+  | "fulltext_origin"
+  | "grants.award_id"
+  | "grants.funder"
+  | "ids.pmcid"
+  | "ids.pmid"
+  | "ids.openalex"
+  | "ids.mag"
+  | "indexed_in"
+  | "keywords.keyword"
+  | "language"
+  | "locations.source.issn"
+  | "locations.source.id"
+  | "locations.source.host_organization"
+  | "locations.source.type"
+  | "locations.version"
+  | "open_access.oa_status"
+  | "oa_status"
+  | "primary_location.source.id"
+  | "primary_location.license"
+  | "primary_location.source.issn"
+  | "primary_location.source.host_organization"
+  | "primary_location.source.type"
+  | "primary_location.version"
+  | "primary_topic.id"
+  | "primary_topic.domain.id"
+  | "primary_topic.field.id"
+  | "primary_topic.subfield.id"
+  | "sustainable_development_goals.id"
+  | "topics.id"
+  | "topics.domain.id"
+  | "topics.field.id"
+  | "topics.subfield.id"
+  | "type"
+  | "type_crossref"
+  | "publication_date";
+
+type WorkNumberFilterAttributes =
+  | "apc_list.value"
+  | "apc_list.value_usd"
+  | "apc_paid.value"
+  | "apc_paid.value_usd"
+  | "cited_by_count"
+  | "countries_distinct_count"
+  | "fwci"
+  | "institutions_distinct_count"
+  | "locations_count"
+  | "publication_year";
+
+type WorkBooleanFilterAttributes =
+  | "authorships.is_corresponding"
+  | "is_corresponding"
+  | "best_oa_location.is_accepted"
+  | "best_oa_location.is_published"
+  | "best_oa_location.source.is_in_doaj"
+  | "has_fulltext"
+  | "is_paratext"
+  | "is_retracted"
+  | "locations.is_accepted"
+  | "locations.is_oa"
+  | "locations.is_published"
+  | "locations.license"
+  | "locations.source.is_core"
+  | "locations.source.is_in_doaj"
+  | "open_access.any_repository_has_fulltext"
+  | "open_access.is_oa"
+  | "is_oa"
+  | "primary_location.is_accepted"
+  | "primary_location.is_oa"
+  | "primary_location.is_published"
+  | "primary_location.source.is_core"
+  | "primary_location.source.is_in_doaj";
+
+type WorkFilterAttributes =
+  | WorkStringFilterAttributes
+  | WorkNumberFilterAttributes
+  | WorkBooleanFilterAttributes;
+
+export class WorkFilter extends Filter {
+  override add(field: WorkStringFilterAttributes, value: string | string[], operator?: Operator): this;
+  override add(field: WorkNumberFilterAttributes, value: number | number[], operator?: Operator): this;
+  override add(field: WorkBooleanFilterAttributes, value: boolean | boolean[], operator?: Operator): this;
+
+  override add(field: WorkFilterAttributes, value: FilterValue | FilterValue[], operator: Operator = ""): this {
+    return super.add(field, value, operator);
+  }
+}
+
+export type {
+  ExcludeWorkField,
+  WorkBooleanFilterAttributes,
+  WorkFilterAttributes,
+  WorkNumberFilterAttributes,
+  WorkStringFilterAttributes,
+};
