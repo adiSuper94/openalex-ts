@@ -1,4 +1,4 @@
-import * as z from "zod/mini";
+import * as z from "@zod/zod/mini";
 
 /** Institutions are universities and other organizations to which authors claim affiliations.
  * The Canonical External ID for institutions is ROR ID. All institutions have a ROR ID.

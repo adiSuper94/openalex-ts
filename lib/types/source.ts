@@ -1,4 +1,4 @@
-import * as z from "zod/mini";
+import * as z from "@zod/zod/mini";
 
 /** Sources are where works are hosted.
  * The Canonical External ID for sources is ISSN-L.

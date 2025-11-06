@@ -1,4 +1,4 @@
-import * as z from "zod/mini";
+import * as z from "@zod/zod/mini";
 import { type DehydratedAuthor, DehydratedAuthorZchema } from "./author.ts";
 import { type DehydratedInstitution, DehydratedInstitutionZchema } from "./institution.ts";
 import { type DehydratedSource, DehydratedSourceZchema } from "./source.ts";

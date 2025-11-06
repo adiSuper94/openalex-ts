@@ -28,7 +28,7 @@ await build({
     homepage: "https://github.com/adiSuper94/openalex-ts#readme",
     author: "Aditya Subramanian",
     dependencies: {
-      "zod": "^4.0.5",
+      "zod": "^4.1.12",
     },
   },
   postBuild() {

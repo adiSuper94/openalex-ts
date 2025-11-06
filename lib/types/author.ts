@@ -1,4 +1,4 @@
-import * as z from "zod/mini";
+import * as z from "@zod/zod/mini";
 import { type DehydratedInstitution, DehydratedInstitutionZchema } from "./institution.ts";
 
 /** Authors are people who create works.
