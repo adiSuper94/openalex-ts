@@ -2,7 +2,11 @@ import { build, emptyDir } from "@deno/dnt";
 
 await emptyDir("./npm");
 import denoJson from "../deno.json" with { type: "json" };
-const { name, version, license } = denoJson;
+const { name, version, license, imports } = denoJson;
+const jsrZodVersion = imports["@zod/zod"];
+
+const zodVersion = jsrZodVersion.replace("jsr:@zod/zod@", "");
+console.log(`zod version : ${zodVersion}`);
 
 await build({
   entryPoints: ["./lib/index.ts"],
@@ -28,7 +32,7 @@ await build({
     homepage: "https://github.com/adiSuper94/openalex-ts#readme",
     author: "Aditya Subramanian",
     dependencies: {
-      "zod": "^4.1.12",
+      "zod": zodVersion,
     },
   },
   postBuild() {
