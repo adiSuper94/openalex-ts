@@ -34,7 +34,7 @@ const DehydratedInstitutionZchema = z.pipe(
     id: z.string(),
     display_name: z.string(),
     country_code: z.nullable(z.string()),
-    lineage: z.array(z.string()),
+    lineage: z.nullable(z.array(z.string())),
     ror: z.string(),
     type: z.union([
       z.literal("education"),
@@ -53,7 +53,7 @@ const DehydratedInstitutionZchema = z.pipe(
       id: data.id,
       displayName: data.display_name,
       countryCode: data.country_code ?? undefined,
-      lineage: data.lineage,
+      lineage: data.lineage ?? [],
       ror: data.ror,
       types: data.type,
     } as DehydratedInstitution;

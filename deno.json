@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "exports": "./lib/index.ts",
   "tasks": {
-    "dev": "deno test --watch"
+    "dev": "deno test --watch --allow-net"
   },
   "fmt": {
     "lineWidth": 120

@@ -23,8 +23,8 @@ interface Location {
 const LocationZchema = z.pipe(
   z.object({
     is_oa: z.boolean(),
-    is_accepted: z.optional(z.boolean()),
-    is_published: z.optional(z.boolean()),
+    is_accepted: z.nullable(z.boolean()),
+    is_published: z.nullable(z.boolean()),
     pdf_url: z.nullable(z.string()),
     version: z.nullable(z.union([
       z.literal("submittedVersion"),
@@ -84,7 +84,7 @@ const AuthorshipZchema = z.pipe(
     affiliations: z.array(
       z.object({
         raw_affiliation_string: z.string(),
-        institution_ids: z.array(z.string()),
+        institution_ids: z.array(z.nullable(z.string())),
       }),
     ),
     author: DehydratedAuthorZchema,
@@ -101,7 +101,7 @@ const AuthorshipZchema = z.pipe(
     return {
       affiliation: data.affiliations.map((aff) => ({
         rawAffiliation: aff.raw_affiliation_string,
-        institutionIds: aff.institution_ids,
+        institutionIds: aff.institution_ids.filter((id) => id != null),
       })),
       author: data.author,
       authorPosition: data.author_position,
@@ -384,7 +384,7 @@ export const WorkZchema = z.pipe(
         score: z.number(),
       }),
     )),
-    has_fulltext: z.boolean(),
+    has_fulltext: z.optional(z.boolean()),
     concepts: z.optional(z.array(z.intersection(z.object({ score: z.number() }), DehydratedConceptZchema))),
   }),
   z.transform((data) => {
@@ -410,7 +410,7 @@ export const WorkZchema = z.pipe(
       publicationYear: data.publication_year,
       citationCountByYear: data["citation_count_by_year"] ?? undefined,
       sdg: data.sustainable_development_goals ?? undefined,
-      fullTextSeachable: data.has_fulltext,
+      fullTextSeachable: data.has_fulltext ?? false,
       concepts: data.concepts?.map((concept) => ({
         ...concept,
       })),

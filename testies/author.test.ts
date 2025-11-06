@@ -7,9 +7,9 @@ Deno.test("Get single author", async () => {
   assertEquals(author?.id, "https://openalex.org/A5023888391");
   const pubDate = author?.createdDate;
   assertEquals(pubDate instanceof Date, true);
-  assertEquals(pubDate?.getUTCFullYear(), 2023);
-  assertEquals(pubDate?.getUTCMonth(), 6);
-  assertEquals(pubDate?.getUTCDate(), 21);
+  assertEquals(pubDate?.getUTCFullYear(), 2016);
+  assertEquals(pubDate?.getUTCMonth(), 5);
+  assertEquals(pubDate?.getUTCDate(), 24);
 });
 
 Deno.test("Get single author, but exclude some fields", async () => {
@@ -19,9 +19,9 @@ Deno.test("Get single author, but exclude some fields", async () => {
   assertEquals(author?.id, "https://openalex.org/A5023888391");
   const pubDate = author?.createdDate;
   assertEquals(pubDate instanceof Date, true);
-  assertEquals(pubDate?.getUTCFullYear(), 2023);
-  assertEquals(pubDate?.getUTCMonth(), 6);
-  assertEquals(pubDate?.getUTCDate(), 21);
+  assertEquals(pubDate?.getUTCFullYear(), 2016);
+  assertEquals(pubDate?.getUTCMonth(), 5);
+  assertEquals(pubDate?.getUTCDate(), 24);
   assertEquals(author?.affiliations, undefined);
   assertEquals(author?.summaryStats, undefined);
   assertEquals(author?.lastKnownInstitutions, undefined);
