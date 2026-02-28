@@ -1,9 +1,9 @@
 import * as z from "zod/mini";
-import { type DehydratedAuthor, DehydratedAuthorZchema } from "./author.ts";
-import { type DehydratedInstitution, DehydratedInstitutionZchema } from "./institution.ts";
-import { type DehydratedSource, DehydratedSourceZchema } from "./source.ts";
-import type { FilterValue, Operator } from "../filter.ts";
-import { Filter } from "../filter.ts";
+import { type DehydratedAuthor, DehydratedAuthorZchema } from "./author.js";
+import { type DehydratedInstitution, DehydratedInstitutionZchema } from "./institution.js";
+import { type DehydratedSource, DehydratedSourceZchema } from "./source.js";
+import type { FilterValue, Operator } from "../filter.js";
+import { Filter } from "../filter.js";
 
 /**
  * Locations are meant to cover anywhere that a given work can be found.
@@ -26,11 +26,9 @@ const LocationZchema = z.pipe(
     is_accepted: z.nullable(z.boolean()),
     is_published: z.nullable(z.boolean()),
     pdf_url: z.nullable(z.string()),
-    version: z.nullable(z.union([
-      z.literal("submittedVersion"),
-      z.literal("acceptedVersion"),
-      z.literal("publishedVersion"),
-    ])),
+    version: z.nullable(
+      z.union([z.literal("submittedVersion"), z.literal("acceptedVersion"), z.literal("publishedVersion")])
+    ),
     source: z.nullable(DehydratedSourceZchema),
   }),
   z.transform((data) => {
@@ -53,7 +51,7 @@ const LocationZchema = z.pipe(
       location.version = data.version;
     }
     return location;
-  }),
+  })
 );
 
 interface zLocation extends z.infer<typeof LocationZchema> {}
@@ -85,14 +83,10 @@ const AuthorshipZchema = z.pipe(
       z.object({
         raw_affiliation_string: z.string(),
         institution_ids: z.array(z.nullable(z.string())),
-      }),
+      })
     ),
     author: DehydratedAuthorZchema,
-    author_position: z.union([
-      z.literal("first"),
-      z.literal("last"),
-      z.literal("middle"),
-    ]),
+    author_position: z.union([z.literal("first"), z.literal("last"), z.literal("middle")]),
     institutions: z.array(DehydratedInstitutionZchema),
     raw_author_name: z.string(),
     is_corresponding: z.boolean(),
@@ -109,7 +103,7 @@ const AuthorshipZchema = z.pipe(
       rawAuthorName: data.raw_author_name,
       isCorresponding: data.is_corresponding,
     } as Authorship;
-  }),
+  })
 );
 
 interface zAuthorship extends z.infer<typeof AuthorshipZchema> {}
@@ -126,7 +120,7 @@ interface OpenAccess {
   isOA: boolean;
   status: "gold" | "green" | "bronze" | "closed" | "hybrid" | "diamond";
   url?: string;
-  anyRepositoryHasFulltext: boolean;
+  anyRepositoryHasFulltext?: boolean;
 }
 
 const OpenAccessZchema = z.pipe(
@@ -141,20 +135,22 @@ const OpenAccessZchema = z.pipe(
       z.literal("diamond"),
     ]),
     oa_url: z.nullish(z.string()),
-    any_repository_has_fulltext: z.boolean(),
+    any_repository_has_fulltext: z.nullish(z.boolean()),
   }),
   z.transform((data) => {
     const oa: OpenAccess = {
       isOA: data.is_oa,
       status: data.oa_status,
-      anyRepositoryHasFulltext: data.any_repository_has_fulltext,
+      ...(data.any_repository_has_fulltext && {
+        anyRepositoryHasFulltext: data.any_repository_has_fulltext,
+      }),
     };
 
     if (data.oa_url) {
       oa.url = data.oa_url;
     }
     return oa;
-  }),
+  })
 );
 
 interface zOpenAccess extends z.infer<typeof OpenAccessZchema> {}
@@ -189,14 +185,7 @@ const DehydratedConceptZchema = z.pipe(
   z.object({
     display_name: z.string(),
     id: z.string(),
-    level: z.union([
-      z.literal(0),
-      z.literal(1),
-      z.literal(2),
-      z.literal(3),
-      z.literal(4),
-      z.literal(5),
-    ]),
+    level: z.union([z.literal(0), z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)]),
     wikidata: z.string(),
   }),
   z.transform((data) => {
@@ -206,7 +195,7 @@ const DehydratedConceptZchema = z.pipe(
       level: data.level,
       wikiDataId: data.wikidata,
     } as DehydratedConcept;
-  }),
+  })
 );
 
 interface zDehydratedConcept extends z.infer<typeof DehydratedConceptZchema> {}
@@ -327,7 +316,7 @@ export const WorkZchema = z.pipe(
         z.literal("crossref"),
         z.literal("doaj"),
         z.literal("datacite"),
-      ]),
+      ])
     ),
     abstract_inverted_index: z.nullish(z.record(z.string(), z.array(z.number()))),
     authorships: z.optional(z.array(AuthorshipZchema)),
@@ -337,18 +326,15 @@ export const WorkZchema = z.pipe(
         currency: z.string(),
         value_usd: z.number(),
         provenance: z.optional(z.literal("doaj")),
-      }),
+      })
     ),
     apc_paid: z.nullish(
       z.object({
         value: z.number(),
         currency: z.string(),
         value_usd: z.number(),
-        provenance: z.optional(z.union([
-          z.literal("doaj"),
-          z.literal("openapc"),
-        ])),
-      }),
+        provenance: z.optional(z.union([z.literal("doaj"), z.literal("openapc")])),
+      })
     ),
     primary_location: z.nullish(LocationZchema),
     best_oa_location: z.nullish(LocationZchema),
@@ -362,28 +348,34 @@ export const WorkZchema = z.pipe(
         issue: z.nullable(z.string()),
         first_page: z.nullable(z.string()),
         last_page: z.nullable(z.string()),
-      }),
+      })
     ),
     fwci: z.nullable(z.number()),
-    citation_normalized_percentile: z.nullish(z.object({
-      value: z.number(),
-      is_in_top_1_percent: z.boolean(),
-      is_in_top_10_percent: z.boolean(),
-    })),
+    citation_normalized_percentile: z.nullish(
+      z.object({
+        value: z.number(),
+        is_in_top_1_percent: z.boolean(),
+        is_in_top_10_percent: z.boolean(),
+      })
+    ),
     cited_by_count: z.number(),
-    citation_count_by_year: z.optional(z.array(
-      z.object({
-        year: z.number(),
-        count: z.number(),
-      }),
-    )),
-    sustainable_development_goals: z.optional(z.array(
-      z.object({
-        id: z.string(),
-        display_name: z.string(),
-        score: z.number(),
-      }),
-    )),
+    citation_count_by_year: z.optional(
+      z.array(
+        z.object({
+          year: z.number(),
+          count: z.number(),
+        })
+      )
+    ),
+    sustainable_development_goals: z.optional(
+      z.array(
+        z.object({
+          id: z.string(),
+          display_name: z.string(),
+          score: z.number(),
+        })
+      )
+    ),
     has_fulltext: z.optional(z.boolean()),
     concepts: z.optional(z.array(z.intersection(z.object({ score: z.number() }), DehydratedConceptZchema))),
   }),
@@ -391,11 +383,12 @@ export const WorkZchema = z.pipe(
     const inv_index = data.abstract_inverted_index ?? undefined;
     let abztract = undefined;
     if (inv_index) {
-      abztract = Object.entries(inv_index).flatMap((
-        [word, indices],
-      ) => (indices.map((index) => ({ key: index, value: word })))).sort((a, b) => a.key - b.key).map((item) =>
-        item.value
-      ).join(" ").trim();
+      abztract = Object.entries(inv_index)
+        .flatMap(([word, indices]) => indices.map((index) => ({ key: index, value: word })))
+        .sort((a, b) => a.key - b.key)
+        .map((item) => item.value)
+        .join(" ")
+        .trim();
     }
     const work: Work = {
       id: data.id,
@@ -457,7 +450,7 @@ export const WorkZchema = z.pipe(
       };
     }
     return work;
-  }),
+  })
 );
 
 type ExcludeWorkField =
@@ -628,10 +621,7 @@ type WorkBooleanFilterAttributes =
   | "primary_location.source.is_core"
   | "primary_location.source.is_in_doaj";
 
-type WorkFilterAttributes =
-  | WorkStringFilterAttributes
-  | WorkNumberFilterAttributes
-  | WorkBooleanFilterAttributes;
+type WorkFilterAttributes = WorkStringFilterAttributes | WorkNumberFilterAttributes | WorkBooleanFilterAttributes;
 
 export class WorkFilter extends Filter {
   override add(field: WorkStringFilterAttributes, value: string | string[], operator?: Operator): this;

@@ -1,5 +1,5 @@
 import * as z from "zod/mini";
-import { type DehydratedInstitution, DehydratedInstitutionZchema } from "./institution.ts";
+import { type DehydratedInstitution, DehydratedInstitutionZchema } from "./institution.js";
 
 /** Authors are people who create works.
  * The Canonical External ID for authors is ORCID ID. Only small % of authors have ORCID IDs.
@@ -30,7 +30,7 @@ const DehydratedAuthorZchema = z.pipe(
       author.orcid = data.orcid;
     }
     return author;
-  }),
+  })
 );
 
 interface zDehydratedAuthor extends z.infer<typeof DehydratedAuthorZchema> {}
@@ -114,10 +114,14 @@ const AuthorZchema = z.pipe(
       scopus: z.optional(z.string()),
       twitter: z.optional(z.string()),
     }),
-    affiliations: z.optional(z.array(z.object({
-      institution: DehydratedInstitutionZchema,
-      years: z.array(z.number()),
-    }))),
+    affiliations: z.optional(
+      z.array(
+        z.object({
+          institution: DehydratedInstitutionZchema,
+          years: z.array(z.number()),
+        })
+      )
+    ),
     cited_by_count: z.number(),
     works_count: z.number(),
     counts_by_year: z.array(
@@ -125,18 +129,20 @@ const AuthorZchema = z.pipe(
         year: z.number(),
         works_count: z.number(),
         cited_by_count: z.number(),
-      }),
+      })
     ),
     created_date: z.optional(z.string()),
     display_name: z.string(),
     display_name_alternatives: z.optional(z.array(z.string())),
-    last_known_institutions: z.optional(z.array(DehydratedInstitutionZchema)),
+    last_known_institutions: z.nullish(z.array(DehydratedInstitutionZchema)),
     orcid: z.optional(z.string()),
-    summary_stats: z.optional(z.object({
-      "2yr_mean_citedness": z.number(),
-      h_index: z.number(),
-      i10_index: z.number(),
-    })),
+    summary_stats: z.optional(
+      z.object({
+        "2yr_mean_citedness": z.number(),
+        h_index: z.number(),
+        i10_index: z.number(),
+      })
+    ),
     updated_date: z.optional(z.string()),
     works_api_url: z.optional(z.string()),
   }),
@@ -173,9 +179,7 @@ const AuthorZchema = z.pipe(
       author.orcid = data.orcid;
     }
     if (data.last_known_institutions) {
-      author.lastKnownInstitutions = data.last_known_institutions.map(
-        (inst) => inst as DehydratedInstitution,
-      );
+      author.lastKnownInstitutions = data.last_known_institutions.map((inst) => inst as DehydratedInstitution);
     }
     if (data.created_date) {
       author.createdDate = new Date(data.created_date);
@@ -194,7 +198,7 @@ const AuthorZchema = z.pipe(
       author.affiliations = data.affiliations;
     }
     return author;
-  }),
+  })
 );
 
 interface zAuthor extends z.infer<typeof AuthorZchema> {}

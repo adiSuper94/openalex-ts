@@ -16,13 +16,15 @@ class Filter {
   }
 
   protected build(): string {
-    return this.filters.map(({ field, value, operator }) => {
-      if (Array.isArray(value)) {
-        return `${field}:${value.map((v) => operator + v).join("|")}`;
-      } else {
-        return `${field}:${operator}${value}`;
-      }
-    }).join(",");
+    return this.filters
+      .map(({ field, value, operator }) => {
+        if (Array.isArray(value)) {
+          return `${field}:${value.map((v) => operator + v).join("|")}`;
+        } else {
+          return `${field}:${operator}${value}`;
+        }
+      })
+      .join(",");
   }
 
   toString(): string {

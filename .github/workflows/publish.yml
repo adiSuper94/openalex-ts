@@ -1,34 +1,26 @@
 name: Publish
 on:
   workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      id-token: write
-
     steps:
       - name: Setup repo
-        uses: actions/checkout@v4
-
-      - name: Setup Deno
-        uses: denoland/setup-deno@v2
-
-      - name: Build NPM package
-        run: deno task npm
-
-      - name: Publish package to jsr
-        run: deno publish --allow-slow-types
+        uses: actions/checkout@v6
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: "22.0"
+          node-version: "24.0"
           registry-url: "https://registry.npmjs.org"
-
-      - name: Publish package to NPM
-        run: cd npm && npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_KEY }}
+      - run: npm install -g npm@latest
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      - run: npm publish

@@ -1,12 +1,12 @@
-import { ALL_WORK_FIELDS, type ExcludeWorkField, parseWork, type Work, type WorkFilter } from "./types/work.ts";
-import { ALL_AUTHOR_FIELDS, type Author, type ExcludeAuthorFields, parseAuthor } from "./types/author.ts";
+import { ALL_WORK_FIELDS, type ExcludeWorkField, parseWork, type Work, type WorkFilter } from "./types/work.js";
+import { ALL_AUTHOR_FIELDS, type Author, type ExcludeAuthorFields, parseAuthor } from "./types/author.js";
 
 export type WorkIdType = "doi" | "mag" | "pmid" | "pmcid" | "openalex";
 
 export async function getWork(
   workId: string,
   workIdType: WorkIdType = "openalex",
-  excludedFields: ExcludeWorkField[] = [],
+  excludedFields: ExcludeWorkField[] = []
 ): Promise<[Work, undefined] | [undefined, Error]> {
   switch (workIdType) {
     case "doi":
@@ -52,7 +52,7 @@ export async function getWork(
 
 export async function getWorks(
   filter: WorkFilter,
-  excludedFields: ExcludeWorkField[] = [],
+  excludedFields: ExcludeWorkField[] = []
 ): Promise<[Work[], undefined] | [undefined, Error]> {
   let selectQuery = "";
   const excludedFieldsSet = new Set(excludedFields);
@@ -95,7 +95,7 @@ export type AuthorIdType = "orcid" | "openalex" | "scopus" | "wikipedia" | "twit
 export async function getAuthor(
   authorId: string,
   authorIdType: AuthorIdType = "openalex",
-  excludedFields: ExcludeAuthorFields[] = [],
+  excludedFields: ExcludeAuthorFields[] = []
 ): Promise<[Author, undefined] | [undefined, Error]> {
   switch (authorIdType) {
     case "orcid":
@@ -116,7 +116,7 @@ export async function getAuthor(
       return [
         undefined,
         new Error(
-          `Invalid author ID type: ${authorIdType}. Valid types are: orcid, openalex, scopus, wikipedia, twitter.`,
+          `Invalid author ID type: ${authorIdType}. Valid types are: orcid, openalex, scopus, wikipedia, twitter.`
         ),
       ];
   }

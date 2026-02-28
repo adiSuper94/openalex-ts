@@ -1,0 +1,52 @@
+{
+  "name": "@adisuper94/openalex",
+  "version": "0.0.1",
+  "description": "A TypeScript/JavaScript wrapper to call OpenAlex REST endpoints",
+  "keywords": [
+    "api",
+    "openalex"
+  ],
+  "homepage": "https://github.com/adiSuper94/openalex-ts#readme",
+  "bugs": {
+    "url": "https://github.com/adiSuper94/openalex-ts/issues"
+  },
+  "author": "Aditya Subramanian",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adiSuper94/openalex-ts.git"
+  },
+  "type": "module",
+  "main": "./dist/lib/index.js",
+  "exports": {
+    "./effect": {
+      "types": "./dist/lib/effect/index.d.ts",
+      "default": "./dist/lib/effect/index.js"
+    },
+    ".": {
+      "types": "./dist/lib/index.d.ts",
+      "default": "./dist/lib/index.js"
+    }
+  },
+  "scripts": {
+    "prepare": "effect-language-service patch",
+    "prepublish": "npm run build",
+    "build": "tsc",
+    "test": "tsc && node --test dist/testies/*.test.js",
+    "check": "tsc --noEmit",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix"
+  },
+  "devDependencies": {
+    "@effect/language-service": "^0.77.0",
+    "@types/node": "^24.0.0",
+    "oxfmt": "^0.28.0",
+    "oxlint": "^1.43.0",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "effect": "^4.0.0-beta.20",
+    "zod": "^4.3.6"
+  }
+}

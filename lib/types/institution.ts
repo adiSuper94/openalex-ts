@@ -57,7 +57,7 @@ const DehydratedInstitutionZchema = z.pipe(
       ror: data.ror,
       types: data.type,
     } as DehydratedInstitution;
-  }),
+  })
 );
 
 interface zDehydratedInstitution extends z.infer<typeof DehydratedInstitutionZchema> {}

@@ -22,15 +22,7 @@ interface DehydratedSource {
   issn?: string[];
   /**The ISSN-L identifying this source. This is the Canonical External ID for sources */
   issnL?: string;
-  type:
-    | "journal"
-    | "repository"
-    | "conference"
-    | "ebook"
-    | "platform"
-    | "book serier"
-    | "metadata"
-    | "other";
+  type: "journal" | "repository" | "conference" | "ebook" | "platform" | "book serier" | "metadata" | "other";
 }
 
 const DehydratedSourceZchema = z.pipe(
@@ -68,7 +60,7 @@ const DehydratedSourceZchema = z.pipe(
       issnL: data.issn_l ?? undefined,
       type: data.type,
     } as DehydratedSource;
-  }),
+  })
 );
 
 interface zDehydratedSource extends z.infer<typeof DehydratedSourceZchema> {}
